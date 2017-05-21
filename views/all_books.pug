@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    h1 Books
+    include partials/_new_book_button
+    include partials/_book_filter
+    table
+      thead
+        tr
+          th Title
+          th Author
+          th Genre
+          th Year Released
+      tbody
+        each book in books
+            tr
+              td
+                a(href='book_detail') book.title
+              td book.author
+              td book.genre
+              td book.first_published
