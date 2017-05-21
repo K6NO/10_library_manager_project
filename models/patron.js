@@ -1,9 +1,10 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Patrons = sequelize.define('Patrons', {
+  var Patrons = sequelize.define('patrons', {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
       primaryKey: true
     },
     first_name: DataTypes.STRING,
@@ -18,6 +19,8 @@ module.exports = function(sequelize, DataTypes) {
         // associations can be defined here
       }
     }
+  }, {
+    underscored: true
   });
   return Patrons;
 };

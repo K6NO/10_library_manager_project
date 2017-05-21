@@ -19,13 +19,13 @@ db.Sequelize = Sequelize;
 
 // Import models
 
-db.Book = require('./book.js')(sequelize, Sequelize);
-db.Patron = require('./patron.js')(sequelize, Sequelize);
-db.Loan = require('./loan.js')(sequelize, Sequelize);
+db.books = require('./book.js')(sequelize, Sequelize);
+db.patrons = require('./patron.js')(sequelize, Sequelize);
+db.loans = require('./loan.js')(sequelize, Sequelize);
 
 // Associations
 
-db.Loan.belongsTo(db.Book);
-//db.Loan.belongsTo(db.Patron);
+db.loans.belongsTo(db.books);
+db.loans.belongsTo(db.patrons);
 
 module.exports = db;

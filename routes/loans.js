@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var title = 'Library Manager';
-var Loan = require('../models/index').Loan;
+var Loan = require('../models/index').loans;
 
 
 router.get('/', function(req, res, next) {
@@ -12,11 +12,11 @@ router.get('/', function(req, res, next) {
     })
 });
 
-router.get('/new_loan', function(req, res, next) {
+router.get('/new', function(req, res, next) {
     res.render('new_loan', { loan : Loan.build, title: title });
 });
 
-router.post('/new_loan', function (req, res, next) {
+router.post('/new', function (req, res, next) {
     console.log('POST');
     console.log(req.body);
     Loan.create(req.body).then(function (loan) {

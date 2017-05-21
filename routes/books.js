@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var title = 'Library Manager';
-var Book = require('../models').Book;
+var Book = require('../models').books;
 
 
 router.get('/', function(req, res, next) {
@@ -12,11 +12,11 @@ router.get('/', function(req, res, next) {
     })
 });
 
-router.get('/new_book', function (req, res, next) {
+router.get('/new', function (req, res, next) {
     res.render('new_book', { book : Book.build, title: title})
 });
 
-router.post('/new_book', function (req, res, next) {
+router.post('/new', function (req, res, next) {
     console.log('POST');
     console.log(req.body);
     Book.create(req.body).then(function (book) {

@@ -1,20 +1,40 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Loans = sequelize.define('Loans', {
+  var Loans = sequelize.define('loans', {
     id: {
-    type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+    type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true
     },
-    loaned_on: DataTypes.DATE,
-    return_by: DataTypes.DATE,
-    returned_on: DataTypes.DATE
+    book_id: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    patron_id: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    loaned_on: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    return_by: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    returned_on: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
   }, {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
       }
     }
+  }, {
+    underscored: true
   });
   return Loans;
 };
