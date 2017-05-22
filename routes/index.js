@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var title = 'Library Manager';
 
 
 
@@ -8,7 +7,7 @@ var title = 'Library Manager';
 
 
 router.get('/book_detail', function(req, res, next) {
-  res.render('book_detail', { title: title });
+  res.render('book_detail', { });
 });
 
 //router.get('/patron_detail', function(req, res, next) {
@@ -18,7 +17,7 @@ router.get('/book_detail', function(req, res, next) {
 /* GET Overdues*/
 
 router.get('/overdue_books', function(req, res, next) {
-  res.render('overdue_books', { title: title });
+  res.render('overdue_books', { });
 });
 
 router.get('/overdue_loans', function(req, res, next) {
@@ -43,7 +42,7 @@ router.get('/return_book', function(req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home', { title: title });
+  res.render('home', { });
 });
 
 module.exports = router;
