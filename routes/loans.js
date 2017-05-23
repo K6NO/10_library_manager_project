@@ -3,19 +3,18 @@ var router = express.Router();
 var Loan = require('../models/index').loans;
 var Book = require('../models/index').books;
 var Patron = require('../models/index').patrons;
-var db = require('../models/index');
 
 router.get('/', function(req, res) {
     Loan.findAll({
-            include : [
-                {model : Book},
-                {model : Patron}
-            ]
+            //include : [
+            //    {model : Book},
+            //    {model : Patron}
+            //]
     }).then(function (loans) {
         console.log(loans);
         res.render('all_loans', { loans : loans });
     }).catch(function (err) {
-        res.send(500);
+        res.sendStatus(500);
     })
 });
 
