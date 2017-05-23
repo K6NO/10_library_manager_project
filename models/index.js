@@ -25,7 +25,9 @@ db.loans = require('./loan.js')(sequelize, Sequelize);
 
 // Associations
 
-db.loans.belongsTo(db.books);
-db.loans.belongsTo(db.patrons);
+db.loans.belongsTo(db.books, {foreignKey: "book_id"});
+db.loans.belongsTo(db.patrons, {foreignKey: "patron_id"});
+db.patrons.hasOne(db.loans, {foreignKey: "patron_id"});
+db.books.hasMany(db.loans, {foreignKey : "book_id"});
 
 module.exports = db;

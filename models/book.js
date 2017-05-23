@@ -1,11 +1,13 @@
 'use strict';
+
+const dateFormat = require('dateformat');
 module.exports = function(sequelize, DataTypes) {
   var Books = sequelize.define('books', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     title: DataTypes.STRING,
     author: DataTypes.STRING,
@@ -15,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
+      }
+    },
+    instanceMethods : {
+      firstPublishedAt : function () {
+        return dateFormat(this.first_published, 'yyyy');
       }
     }
   }, {

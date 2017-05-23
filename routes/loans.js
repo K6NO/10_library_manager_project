@@ -3,15 +3,16 @@ var router = express.Router();
 var Loan = require('../models/index').loans;
 var Book = require('../models/index').books;
 var Patron = require('../models/index').patrons;
-
+var db = require('../models/index');
 
 router.get('/', function(req, res) {
     Loan.findAll({
             include : [
-                {model : db.books},
-                {model : db.patrons}
+                {model : Book},
+                {model : Patron}
             ]
     }).then(function (loans) {
+        console.log(loans);
         res.render('all_loans', { loans : loans });
     }).catch(function (err) {
         res.send(500);
@@ -20,24 +21,28 @@ router.get('/', function(req, res) {
 
 router.get('/new', function(req, res) {
     var booksAndPatrons = [];
-    Book.findAll()
+    const loanDate = new Date();
+    const returnDate = new Date();
+    returnDate.setDate(loanDate.getDate() + 7);
+    Book.findAll({
+        include : {
+            model: Loan
+        }
+    })
         .then(function (books) {
         booksAndPatrons.push(books);
     });
     Patron.findAll()
         .then(function (patrons) {
-            //console.log(patrons);
             booksAndPatrons.push(patrons);
         })
         .then(function () {
-            //console.log('books:_____');
-            //console.log(booksAndPatrons[0]);
-            //console.log('patrons:_____');
-            console.log(booksAndPatrons[1]);
             res.render('new_loan', {
                 loan : Loan.build(),
                 books : booksAndPatrons[0],
-                patrons : booksAndPatrons[1]
+                patrons : booksAndPatrons[1],
+                loanDate : loanDate,
+                returnDate : returnDate
             });
         })
         .catch(function (err) {

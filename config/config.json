@@ -3,7 +3,8 @@
     "dialect": "sqlite",
     "storage" : "library.db",
     "define" : {
-      "underscored" : true
+      "underscored" : true,
+      "timestamps" : false
     }
 
   },
@@ -11,7 +12,8 @@
     "dialect": "sqlite",
     "storage" : "library.db",
     "define" : {
-      "underscored" : true
+      "underscored" : true,
+      "timestamps" : false
     }
 
   },
@@ -19,7 +21,8 @@
     "dialect": "sqlite",
     "storage" : "library.db",
     "define" : {
-      "underscored" : true
+      "underscored" : true,
+      "timestamps" : false
     }
   }
 }

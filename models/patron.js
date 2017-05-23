@@ -2,10 +2,10 @@
 module.exports = function(sequelize, DataTypes) {
   var Patrons = sequelize.define('patrons', {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
@@ -17,6 +17,11 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
+      }
+    },
+    instanceMethods: {
+      fullName : function () {
+        return this.first_name + ' ' + this.last_name;
       }
     }
   }, {

@@ -17,9 +17,9 @@ block content
         each loan in loans
             tr
               td
-                a(href='/books/book_detail/' + loan.book_id) Emma
+                a(href='/books/book_detail/' + loan.book_id) book title comes here
               td
-                a(href='/patrons/patron_detail/' + loan.patron_id) Dave McFarland
+                a(href='/patrons/patron_detail/' + loan.patron_id) patron name comes here
               td #{loan.loaned_on}
               td #{loan.return_by}
               td #{loan.returned_on}

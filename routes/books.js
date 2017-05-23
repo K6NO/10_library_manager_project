@@ -1,6 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var Book = require('../models').books;
+const express = require('express');
+const router = express.Router();
+const Book = require('../models').books;
+const Patron = require('../models').patrons;
+const Loan = require('../models').loans;
+
 
 // GET all books
 router.get('/', function(req, res, next) {

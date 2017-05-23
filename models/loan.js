@@ -2,30 +2,30 @@
 module.exports = function(sequelize, DataTypes) {
   var Loans = sequelize.define('loans', {
     id: {
-    type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true
     },
     book_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     patron_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     loaned_on: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     return_by: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     returned_on: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     }
   }, {
     classMethods: {
