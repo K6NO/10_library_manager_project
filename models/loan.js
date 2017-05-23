@@ -43,7 +43,9 @@ module.exports = function(sequelize, DataTypes) {
         return dateFormat(this.return_by, 'yyyy-mm-dd');
       },
       returnedOn: function() {
-        return dateFormat(this.returned_on, 'yyyy-mm-dd');
+        if(this.returned_on !== null){
+          return dateFormat(this.returned_on, 'yyyy-mm-dd');
+        }
       }
     }
   });

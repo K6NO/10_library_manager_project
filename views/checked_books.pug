@@ -15,7 +15,7 @@ block content
         each loan in loans
           tr
             td
-              a(href='book_detail/' + loan.Book.id) loan.Book.title
-              td loan.Book.author
-              td loan.Book.genre
-              td loan.Book.first_published
+              a(href='book_detail/' + loan.book.id) #{loan.book.title}
+              td #{loan.book.author}
+              td #{loan.book.genre}
+              td #{loan.book.firstPublished()}

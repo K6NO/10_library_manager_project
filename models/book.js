@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     instanceMethods : {
-      firstPublishedAt : function () {
+      firstPublished : function () {
         return dateFormat(this.first_published, 'yyyy');
       }
     }
