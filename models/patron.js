@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     email: DataTypes.STRING,
     library_id: DataTypes.STRING,
     zip_code: DataTypes.INTEGER
-  }, {
+    }, {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
@@ -24,8 +24,6 @@ module.exports = function(sequelize, DataTypes) {
         return this.first_name + ' ' + this.last_name;
       }
     }
-  }, {
-    underscored: true
   });
   return Patrons;
 };

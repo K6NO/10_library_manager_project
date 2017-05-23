@@ -1,4 +1,6 @@
 'use strict';
+const dateFormat = require('dateformat');
+
 module.exports = function(sequelize, DataTypes) {
   var Loans = sequelize.define('loans', {
     id: {
@@ -32,9 +34,18 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         // associations can be defined here
       }
+    },
+    instanceMethods: {
+      loanedOn : function() {
+        return dateFormat(this.loaned_on, 'yyyy-mm-dd');
+      },
+      returnBy: function() {
+        return dateFormat(this.return_by, 'yyyy-mm-dd');
+      },
+      returnedOn: function() {
+        return dateFormat(this.returned_on, 'yyyy-mm-dd');
+      }
     }
-  }, {
-    underscored: true
   });
   return Loans;
 };

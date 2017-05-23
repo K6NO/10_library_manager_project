@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+
       }
     },
     instanceMethods : {
@@ -24,8 +24,6 @@ module.exports = function(sequelize, DataTypes) {
         return dateFormat(this.first_published, 'yyyy');
       }
     }
-  }, {
-    underscored: true
   });
   return Books;
 };

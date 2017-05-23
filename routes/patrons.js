@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var Patron = require('../models').patrons;
+const Book = require('../models').books;
+const Patron = require('../models').patrons;
+const Loan = require('../models').loans;
 
 // GET all patrons
 router.get('/', function(req, res, next) {
@@ -22,7 +24,7 @@ router.post('/new', function(req, res, next) {
     console.log(req.body);
     Patron.create(req.body)
         .then(function (patron) {
-        res.render('patron_detail', {patron: patron })
+        res.redirect('/patrons')
     })
         .catch(function (err) {
             if(err.name ==='SequelizeValidationError'){
@@ -43,14 +45,30 @@ router.post('/new', function(req, res, next) {
 router.get('/patron_detail/:id', function (req, res, next) {
     Patron.findById(req.params.id).then(function (patron) {
         if(patron){
-            res.render('patron_detail', {
-                patron : patron
+
+            //Associations
+            Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
+            Loan.belongsTo(Book, {foreignKey: 'book_id'});
+
+            Loan.findAll({
+                include : [
+                    {model: Book, required: true},
+                    {model: Patron, required: true}
+                ],
+                where : {patron_id : req.params.id}
             })
+                .then(function (loans) {
+                    res.render('patron_detail', {
+                        patron : patron,
+                        loans : loans
+                    })
+                })
+
         } else {
             res.send(404);
         }
     }).catch(function (err) {
-        res.send(500);
+        res.sendStatus(500);
     })
 });
 
