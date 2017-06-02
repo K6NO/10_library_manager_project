@@ -4,7 +4,7 @@ block content
     h1 Books
     include partials/_new_book_button
     include partials/_book_filter
-    h1 Overdue Books
+    h2 Overdue Books
     table
       thead
         tr
@@ -20,4 +20,4 @@ block content
                 a(href='/books/book_detail/' + loan.book.id) #{loan.book.title}
                 td #{loan.book.author}
                 td #{loan.book.genre}
-                td #{loan.book.firstPublished()}
+                td #{loan.book.first_published}

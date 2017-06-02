@@ -7,20 +7,20 @@ const Loan = require('../models').loans;
 
 // GET all books
 router.get('/', function(req, res, next) {
-    //define association - //TODO - maybe this can be moved to the model definition?
-    Loan.belongsTo(Book, {foreignKey: 'book_id'});
 
     let filter = req.query.filter;
     var searchField = req.query.searchField;
 
     if(filter === 'overdue') {
+        Loan.belongsTo(Book, {foreignKey: 'book_id'});
 
         Loan.findAll({
             where: {returned_on: {$eq: null}, return_by: {$lt : new Date()}},
             include: [{model : Book, required: true}]
         })
             .then(function (loans) {
-                res.render('all_books', {loans: loans})
+                console.log(loans);
+                res.render('overdue_books', {loans: loans})
             })
             .catch(function (err) {
                 res.sendStatus(500);
@@ -32,13 +32,12 @@ router.get('/', function(req, res, next) {
             include: [{model: Book, required: true}]
         })
             .then(function (loans) {
-                res.render('all_books', {loans: loans})
+                res.render('checked_books', {loans: loans})
             })
             .catch(function (err) {
                 res.sendStatus(500);
             })
     } else if (searchField !== undefined ) {
-        console.log(searchField);
         Book.findAll({
             where: {
                 $or: [
@@ -149,10 +148,8 @@ router.post('/new', function (req, res, next) {
         res.redirect('/books')
     })
         .catch(function (err) {
-            console.log(err.name);
 
             if (err.name === 'SequelizeValidationError'){
-                console.log(req.body);
                 res.render('new_book', {
                     book : Book.build(req.body),
                     errors : err.errors
