@@ -14,7 +14,7 @@ block content
         input#genre(type='text', name='genre', value=book.genre)
       p
         label(for='first_published') First Published
-        input#first_published(type='text', name='first_published', value=book.firstPublishedAt())
+        input#first_published(type='text', name='first_published', value=book.firstPublished())
       p
         input(type='submit', value='Update')
     h2 Loan History
@@ -38,4 +38,5 @@ block content
             td #{loan.returnBy()}
             td #{loan.returnedOn()}
             td
-              a.button(href='return_book') Return Book
+              unless loan.returned_on
+                a.button(href='/loans/return_book/' + loan.id) Return Book

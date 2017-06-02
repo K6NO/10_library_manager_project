@@ -25,4 +25,4 @@ block content
               td #{loan.returnedOn()}
               td
                 unless loan.returned_on
-                    a.button(href='return_book.html') Return Book
+                    a.button(href='/loans/return_book/' + loan.id) Return Book

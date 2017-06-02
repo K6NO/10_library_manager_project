@@ -79,7 +79,7 @@ router.post('/book_detail/:id', function (req, res, next) {
         .then(function (book) {
             return book.update(req.body);
     })
-        .then(function (book) {
+        .then(function () {
             res.redirect('/books');
         })
         .catch(function (err) {
@@ -141,4 +141,6 @@ router.post('/new', function (req, res, next) {
             res.send(500);
         })
 });
+
+
 module.exports = router;

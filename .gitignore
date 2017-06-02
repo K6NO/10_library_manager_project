@@ -32,3 +32,4 @@ npm-debug.log
 # IntelliJ Idea
 .idea/
 mocks/
+library.db
