@@ -19,11 +19,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     loaned_on: {
       type: DataTypes.DATE,
-      allowNull: true
+      validate : {
+        notEmpty : {
+          msg : 'Enter date!'
+        }
+      }
     },
     return_by: {
       type: DataTypes.DATE,
-      allowNull: true
+      validate : {
+        notEmpty : {
+          msg : 'Enter date!'
+        }
+      }
     },
     returned_on: {
       type: DataTypes.DATE,

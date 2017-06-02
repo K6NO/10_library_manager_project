@@ -3,6 +3,8 @@ var router = express.Router();
 var Loan = require('../models/index').loans;
 var Book = require('../models/index').books;
 var Patron = require('../models/index').patrons;
+const dateFormat = require('dateformat');
+
 
 router.get('/', function(req, res) {
     // Associations
@@ -50,24 +52,9 @@ router.get('/', function(req, res) {
 });
 
 router.get('/new', function(req, res) {
-    const loanDate = new Date();
-    const returnDate = new Date();
+    let loanDate = new Date();
+    let returnDate = new Date();
     returnDate.setDate(loanDate.getDate() + 7);
-
-    // select books on loan at present, do not display them in the drop-down list
-    Loan.findAll({})
-        .then(function (loans) {
-            return loans.filter(function (loan) {
-                return loan.returned_on === null
-            })
-                .map(function (loan) {
-                    return loan.book_id;
-                });
-        })
-        .then(function (loanedBookIds) {
-            console.log(loanedBookIds);
-
-            if(loanedBookIds === null) loanedBookIds = [];
             Book.findAll()
                 .then(function (books) {
                     Patron.findAll()
@@ -76,18 +63,42 @@ router.get('/new', function(req, res) {
                                 loan : Loan.build(),
                                 books : books,
                                 patrons : patrons,
-                                loanDate : loanDate,
-                                returnDate : returnDate
+                                loanDate : dateFormat(loanDate, 'yyyy-mm-dd'),
+                                returnDate : dateFormat(returnDate, 'yyyy-mm-dd')
                             })
                         })
-                })
-        })
+                });
 });
 
 router.post('/new', function (req, res, next) {
-    Loan.create(req.body).then(function () {
+    Loan.create(req.body)
+        .then(function () {
         res.redirect('/loans')
     })
+        .catch(function (err) {
+            if(err.name === 'SequelizeValidationError') {
+                let loanDate = new Date();
+                loanDate = dateFormat(loanDate, 'yyyy-mm-dd');
+                console.log(loanDate);
+                let returnDate = new Date();
+                returnDate = dateFormat(returnDate, 'yyyy-mm-dd');
+                returnDate.setDate(loanDate.getDate() + 7);
+                Book.findAll()
+                    .then(function (books) {
+                        Patron.findAll()
+                            .then(function (patrons) {
+                                res.render('new_loan', {
+                                    loan : Loan.build(req.body),
+                                    books : books,
+                                    patrons : patrons,
+                                    loanDate : loanDate,
+                                    returnDate : returnDate,
+                                    errors: err.errors
+                                })
+                            })
+                    });
+            }
+        })
 });
 
 // GET return book

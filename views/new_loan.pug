@@ -2,6 +2,7 @@ extends layout
 
 block content
     h1 New Loan
+    include error
     form(method='post', actions='loans/new')
       p
         label(for='book_id') Book

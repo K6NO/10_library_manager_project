@@ -16,7 +16,8 @@ router.get('/', function(req, res, next) {
 
         Loan.findAll({
             where: {returned_on: {$eq: null}, return_by: {$lt : new Date()}},
-            include: [{model : Book, required: true}]
+            include: [{model : Book, required: true}],
+            limit: 10
         })
             .then(function (loans) {
                 console.log(loans);
@@ -29,7 +30,8 @@ router.get('/', function(req, res, next) {
     } else if(filter === 'checked_out') {
         Loan.findAll({
             where: {returned_on: {$eq: null}},
-            include: [{model: Book, required: true}]
+            include: [{model: Book, required: true}],
+            limit: 10
         })
             .then(function (loans) {
                 res.render('checked_books', {loans: loans})
