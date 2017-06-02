@@ -7,7 +7,6 @@ const Loan = require('../models').loans;
 
 // GET all books
 router.get('/', function(req, res, next) {
-
     //define association - //TODO - maybe this can be moved to the model definition?
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
 
@@ -19,7 +18,7 @@ router.get('/', function(req, res, next) {
             include: [{model : Book, required: true}]
         })
             .then(function (loans) {
-                res.render('overdue_books', {loans: loans})
+                res.render('all_books', {loans: loans})
             })
             .catch(function (err) {
                 res.sendStatus(500);
@@ -31,7 +30,7 @@ router.get('/', function(req, res, next) {
             include: [{model: Book, required: true}]
         })
             .then(function (loans) {
-                res.render('checked_books', {loans: loans})
+                res.render('all_books', {loans: loans})
             })
             .catch(function (err) {
                 res.sendStatus(500);
@@ -39,10 +38,13 @@ router.get('/', function(req, res, next) {
     } else {
         Book.findAll()
             .then(function (books) {
-            res.render('all_books', { books : books});
+                console.log(books);
+                res.render('all_books', { books : books});
             })
             .catch(function (err) {
-            res.send(500);
+                console.log('in get');
+
+                res.sendStatus(500);
         })
     }
 
@@ -111,7 +113,7 @@ router.put('/book_detail/:id', function (req, res, next) {
                 throw err;
             }
     }).catch(function (err) {
-        res.send(500);
+        res.sendStatus(500);
     })
 });
 
@@ -138,7 +140,7 @@ router.post('/new', function (req, res, next) {
             }
         })
         .catch(function (err) {
-            res.send(500);
+            res.sendStatus(500);
         })
 });
 

@@ -27,11 +27,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
+
 /**
  * Routes
  */
-
-
 app.use('/', index);
 app.use('/books', books);
 app.use('/patrons', patrons);

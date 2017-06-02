@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
         }
       }
     },
-    first_published: DataTypes.DATE
+    first_published: DataTypes.INTEGER
   }, {
     classMethods: {
       associate: function(models) {
@@ -41,9 +41,9 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     instanceMethods : {
-      firstPublished : function () {
-        return dateFormat(this.first_published, 'yyyy');
-      }
+      //firstPublished : function () {
+      //  if(this.first_published !== 'Invalid date') return dateFormat(this.first_published, 'yyyy');
+      //}
     }
   });
   return Books;
