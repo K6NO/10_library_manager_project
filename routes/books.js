@@ -11,6 +11,8 @@ router.get('/', function(req, res, next) {
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
 
     let filter = req.query.filter;
+    var searchField = req.query.searchField;
+
     if(filter === 'overdue') {
 
         Loan.findAll({
@@ -35,6 +37,23 @@ router.get('/', function(req, res, next) {
             .catch(function (err) {
                 res.sendStatus(500);
             })
+    } else if (searchField !== undefined ) {
+        console.log(searchField);
+        Book.findAll({
+            where: {
+                $or: [
+                    {
+                        title: {
+                            $like: '%' + searchField + '%'
+                        }
+                    }
+                ]
+            }
+        }).then(function(books) {
+            res.render('all_books', {books : books});
+        }).catch(function(err) {
+            res.sendStatus(500);
+        });
     } else {
         Book.findAll()
             .then(function (books) {

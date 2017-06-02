@@ -66,13 +66,10 @@ router.get('/new', function(req, res) {
         })
         .then(function (loanedBookIds) {
             console.log(loanedBookIds);
-            Book.findAll({
-                where : {id : {
-                    $notIn : loanedBookIds
-                }}
-            })
+
+            if(loanedBookIds === null) loanedBookIds = [];
+            Book.findAll()
                 .then(function (books) {
-                    //console.log(books);
                     Patron.findAll()
                         .then(function (patrons) {
                             res.render('new_loan', {

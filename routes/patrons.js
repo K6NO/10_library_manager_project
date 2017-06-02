@@ -8,9 +8,6 @@ const Loan = require('../models').loans;
 router.get('/', function(req, res, next) {
     Patron.findAll().then(function (patrons) {
         res.render('all_patrons', {patrons: patrons });
-    }).catch(function (err) {
-
-        res.send(500);
     })
 });
 
@@ -54,6 +51,8 @@ router.get('/patron_detail/:id', function (req, res, next) {
                 where : {patron_id : req.params.id}
             })
                 .then(function (loans) {
+                    console.log(patron);
+
                     res.render('patron_detail', {
                         patron : patron,
                         loans : loans
@@ -67,33 +66,42 @@ router.get('/patron_detail/:id', function (req, res, next) {
 
 // UPDATE patron
 router.put('/patron_detail/:id', function (req, res, next) {
-    console.log(req.params.id);
     Patron.findById(req.params.id)
         .then(function (patron) {
-            console.log(patron);
-            if (patron){
-                return patron.update(req.body);
-            } else {
-                res.send(404);
-            }
+            return patron.update(req.body);
         })
-        .then(function (patron) {
-            res.redirect('/patrons/patron_detail/' + patron.id);
+        .then(function () {
+            res.redirect('/patrons');
         })
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError'){
-                var patron = Patron.build(req.body);
-                patron.id = req.params.id;
-                res.render('/patron_detail/' + patron.id, {
-                    patron : patron,
-                    errors : err.errors
-                })
+                Loan.belongsTo(Book, {foreignKey: 'book_id'});
+                Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
+
+                Loan.findAll({
+                    include: [
+                        {model: Book,required: true},
+                        {model: Patron,required: true}
+                    ],
+                    where: {
+                        patron_id: req.params.id
+                    }
+                }).then(function(loans) {
+                    console.log(err.errors);
+                    req.body.id = req.params.id;
+                    res.render('patron_detail', {
+                        patron: req.body,
+                        loans: loans,
+                        errors: err.errors
+                    });
+                }).catch(function(err) {
+                    res.sendStatus(500);
+                }); // End of Loans.findAll
             } else {
                 throw err;
             }
-        }).catch(function (err) {
-        res.send(500);
-    })
+        })
+
 });
 
 module.exports = router;

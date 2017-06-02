@@ -1,6 +1,5 @@
 'use strict';
 
-const dateFormat = require('dateformat');
 module.exports = function(sequelize, DataTypes) {
   var Books = sequelize.define('books', {
     id: {
@@ -41,9 +40,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     instanceMethods : {
-      //firstPublished : function () {
-      //  if(this.first_published !== 'Invalid date') return dateFormat(this.first_published, 'yyyy');
-      //}
+
     }
   });
   return Books;
