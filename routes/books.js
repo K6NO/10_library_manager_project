@@ -55,14 +55,15 @@ router.get('/', function(req, res, next) {
             res.sendStatus(500);
         });
     } else {
-        Book.findAll()
+        Book.findAll({
+            order : [['title', 'ASC' ]],
+            limit : 10
+        })
             .then(function (books) {
                 console.log(books);
                 res.render('all_books', { books : books});
             })
             .catch(function (err) {
-                console.log('in get');
-
                 res.sendStatus(500);
         })
     }
@@ -143,13 +144,15 @@ router.get('/new', function (req, res, next) {
 
 // POST save new book
 router.post('/new', function (req, res, next) {
-    console.log(req.body);
     Book.create(req.body)
-        .then(function (book) {
+        .then(function () {
         res.redirect('/books')
     })
         .catch(function (err) {
-            if (err === 'SequelizeValidationError'){
+            console.log(err.name);
+
+            if (err.name === 'SequelizeValidationError'){
+                console.log(req.body);
                 res.render('new_book', {
                     book : Book.build(req.body),
                     errors : err.errors
