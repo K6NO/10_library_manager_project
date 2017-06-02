@@ -2,6 +2,7 @@ extends layout
 
 block content
     h1 Patron: Return Book
+    include error
     p
       strong Book Title:
       |  #{loan[0].book.title}

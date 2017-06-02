@@ -47,6 +47,23 @@ router.get('/', function(req, res, next) {
                         title: {
                             $like: '%' + searchField + '%'
                         }
+
+                    },
+                    {
+                        author: {
+                            $like: '%' + searchField + '%'
+                        }
+
+                    },
+                    {
+                        genre: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        first_published: {
+                            $like: '%' + searchField + '%'
+                        }
                     }
                 ]
             }

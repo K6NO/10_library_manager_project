@@ -6,9 +6,57 @@ const Loan = require('../models').loans;
 
 // GET all patrons
 router.get('/', function(req, res, next) {
-    Patron.findAll().then(function (patrons) {
-        res.render('all_patrons', {patrons: patrons });
-    })
+    var searchField = req.query.searchField;
+
+    if(searchField !== undefined) {
+        Patron.findAll({
+            where: {
+                $or: [
+                    {
+                        first_name: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        last_name: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        address: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        email: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        library_id: {
+                            $like: '%' + searchField + '%'
+                        }
+                    },
+                    {
+                        zip_code: {
+                            $like: '%' + searchField + '%'
+                        }
+                    }
+                ]
+            }
+        })
+            .then(function (patrons) {
+                res.render('all_patrons', {patrons : patrons})
+            })
+            .catch(function (err) {
+                response.sendStatus(500);
+            })
+    } else {
+        Patron.findAll().then(function (patrons) {
+            res.render('all_patrons', {patrons: patrons });
+        })
+    }
+
 });
 
 // GET new patron page

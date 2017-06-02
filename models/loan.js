@@ -35,8 +35,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     returned_on: {
       type: DataTypes.DATE,
-      allowNull: true
-    }
+      validate : {
+        notEmpty : {
+          msg : 'Enter return date!'
+        }
+      }    }
   }, {
     classMethods: {
       associate: function(models) {

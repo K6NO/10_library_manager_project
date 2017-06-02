@@ -97,6 +97,10 @@ router.post('/new', function (req, res, next) {
                                 })
                             })
                     });
+            } else {
+                //TODO check if it works or simply throw error
+                res.sendStatus(500);
+
             }
         })
 });
@@ -105,6 +109,8 @@ router.post('/new', function (req, res, next) {
 router.get('/return_book/:id', function (req, res, next) {
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
     Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
+    let returnDate = new Date();
+    returnDate = dateFormat(returnDate, 'yyyy-mm-dd');
 
     Loan.findAll({
             include : [
@@ -114,10 +120,9 @@ router.get('/return_book/:id', function (req, res, next) {
             where : {id : {$eq: req.params.id}}
         })
         .then(function (loan) {
-            console.log(loan);
             res.render('return_book', {
                 loan : loan,
-                returned_on : new Date()
+                returned_on : returnDate
             });
         })
         .catch(function (err) {
@@ -127,8 +132,12 @@ router.get('/return_book/:id', function (req, res, next) {
 
 
 // PUT return book
-router.put('/return_book/:id', function (req, res, next) {
-    console.log(req.params.id);
+router.put('/return_book/:id', function (req, res) {
+    Loan.belongsTo(Book, {foreignKey: 'book_id'});
+    Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
+    let returnDate = new Date();
+    returnDate = dateFormat(returnDate, 'yyyy-mm-dd');
+
     Loan.findById(req.params.id)
         .then(function (loan) {
             return loan.update(req.body)
@@ -137,7 +146,27 @@ router.put('/return_book/:id', function (req, res, next) {
             res.redirect('/loans');
         })
         .catch(function (err) {
-            res.sendStatus(500);
+            console.log(req.body);
+            if(err.name === 'SequelizeValidationError'){
+                Loan.findAll({
+                        include : [
+                            {model: Book, required: true},
+                            {model: Patron, required: true}
+                        ],
+                        where : {id : {$eq: req.params.id}}
+                    })
+                    .then(function (loan) {
+                        console.log(loan);
+                        res.render('return_book', {
+                            loan : loan,
+                            returned_on : returnDate,
+                            errors: err.errors
+                        });
+                    })
+
+            } else {
+                res.sendStatus(500);
+            }
         })
 });
 
