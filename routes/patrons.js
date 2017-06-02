@@ -35,16 +35,12 @@ router.post('/new', function(req, res, next) {
             } else {
                 throw err;
             }
-        })
-        .catch(function (err) {
-            res.send(500);
         });
 });
 
 //GET single patron
 router.get('/patron_detail/:id', function (req, res, next) {
     Patron.findById(req.params.id).then(function (patron) {
-        if(patron){
 
             //Associations
             Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
@@ -63,17 +59,14 @@ router.get('/patron_detail/:id', function (req, res, next) {
                         loans : loans
                     })
                 })
-
-        } else {
-            res.send(404);
-        }
-    }).catch(function (err) {
-        res.sendStatus(500);
+                .catch(function (err) {
+                    res.sendStatus(500);
+                })
     })
 });
 
 // UPDATE patron
-router.post('/patron_detail/:id', function (req, res, next) {
+router.put('/patron_detail/:id', function (req, res, next) {
     console.log(req.params.id);
     Patron.findById(req.params.id)
         .then(function (patron) {

@@ -1,7 +1,9 @@
 extends layout
 
 block content
-    h1 Patron: #{patron.first_name} #{patron.last_name}
+    h1 Patron: #{patron.fullName()}
+    include errors
+
     form(method='post', action='/patrons/patron_detail/' + patron.id + '?_method=PUT')
       p
         label(for='first_name') First Name

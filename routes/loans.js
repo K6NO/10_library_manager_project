@@ -88,8 +88,6 @@ router.get('/new', function(req, res) {
 });
 
 router.post('/new', function (req, res, next) {
-    console.log('POST');
-    console.log(req.body);
     Loan.create(req.body).then(function () {
         res.redirect('/loans')
     })
@@ -121,17 +119,10 @@ router.get('/return_book/:id', function (req, res, next) {
 
 
 // PUT return book
-
-router.post('/return_book/:id', function (req, res, next) {
+router.put('/return_book/:id', function (req, res, next) {
     console.log(req.params.id);
     Loan.findById(req.params.id)
         .then(function (loan) {
-            console.log('reqbody____________');
-
-            console.log(req.body);
-            console.log('loan____________');
-
-            console.log(loan);
             return loan.update(req.body)
         })
         .then(function () {

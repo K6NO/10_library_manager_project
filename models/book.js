@@ -9,9 +9,30 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    title: DataTypes.STRING,
-    author: DataTypes.STRING,
-    genre: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : 'Enter the title!'
+        }
+      }
+    },
+    author: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : 'Enter author name!'
+        }
+      }
+    },
+    genre: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : 'Enter genre!'
+        }
+      }
+    },
     first_published: DataTypes.DATE
   }, {
     classMethods: {

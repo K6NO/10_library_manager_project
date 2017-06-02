@@ -73,7 +73,7 @@ router.get('/book_detail/:id', function (req, res, next) {
 });
 
 // UPDATE book details - router.put works only if book is returned!!!
-router.post('/book_detail/:id', function (req, res, next) {
+router.put('/book_detail/:id', function (req, res, next) {
     console.log(req.params.id);
     Book.findById(req.params.id)
         .then(function (book) {
