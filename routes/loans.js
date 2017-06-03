@@ -86,8 +86,7 @@ router.get('/new', function(req, res) {
                 });
 });
 
-//POST /loans/new
-
+// POST /loans/new
 router.post('/new', function (req, res, next) {
     Loan.create(req.body)
         .then(function () {
@@ -116,9 +115,7 @@ router.post('/new', function (req, res, next) {
                             })
                     });
             } else {
-                //TODO check if it works or simply throw error
                 res.sendStatus(500);
-
             }
         })
 });
@@ -187,5 +184,4 @@ router.put('/return_book/:id', function (req, res) {
             }
         })
 });
-
 module.exports = router;

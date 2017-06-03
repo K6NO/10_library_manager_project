@@ -4,7 +4,6 @@ const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
-
 // GET all books
 router.get('/', function(req, res, next) {
 
@@ -92,9 +91,8 @@ router.get('/', function(req, res, next) {
     }
 });
 
-//GET single book
+//GET /books/book_detail - single book
 router.get('/book_detail/:id', function (req, res, next) {
-    //define association - //TODO - maybe this can be moved to the model definition?
 
     Book.findById(req.params.id).then(function (book) {
         Loan.belongsTo(Book, {foreignKey: 'book_id'});
@@ -116,7 +114,8 @@ router.get('/book_detail/:id', function (req, res, next) {
     })
 });
 
-// UPDATE book details - router.put works only if book is returned!!!
+// PUT /books/book_detail/
+// update book details - router.put works only if book is returned!!!
 router.put('/book_detail/:id', function (req, res, next) {
     console.log(req.params.id);
     Book.findById(req.params.id)
@@ -129,7 +128,6 @@ router.put('/book_detail/:id', function (req, res, next) {
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError'){
 
-                // TODO check if associations can be moved to model
                 Loan.belongsTo(Book, {foreignKey: 'book_id'});
                 Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
 
@@ -159,7 +157,7 @@ router.put('/book_detail/:id', function (req, res, next) {
     })
 });
 
-// new book
+// GET /books/new/
 router.get('/new', function (req, res, next) {
     res.render('new_book', { book : Book.build()})
 });
