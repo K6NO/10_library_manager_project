@@ -26,3 +26,6 @@ block content
               td
                 unless loan.returned_on
                     a.button(href='/loans/return_book/' + loan.id) Return Book
+    if loans.length >= 10
+      hr
+      include partials/_loanpaginator

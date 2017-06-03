@@ -5,13 +5,14 @@ var Book = require('../models/index').books;
 var Patron = require('../models/index').patrons;
 const dateFormat = require('dateformat');
 
-
+//GET /loans
 router.get('/', function(req, res) {
     // Associations
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
     Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
-
     let filter = req.query.filter;
+    let page = req.query.page;
+
     if (filter === 'overdue') {
         Loan.findAll({
             include : [
@@ -37,20 +38,35 @@ router.get('/', function(req, res) {
             res.sendStatus(500);
         })
 
-    } else {
+    } else if (page) {
+        let offset = parseInt(page) * 10;
+        let prevPage = page -1;
+
         Loan.findAll({
             include : [
                 {model : Book, required: true},
                 {model : Patron, required: true}
-            ]
+            ],
+            order : [['return_by', 'ASC' ]],
+            limit : 10,
+            offset: offset
         }).then(function (loans) {
-            res.render('all_loans', { loans : loans });
+            console.log(loans[0]);
+
+            res.render('all_loans', {
+                loans : loans,
+                page : parseInt(page) + 1,
+                prevPage : prevPage
+
+            });
         }).catch(function (err) {
+            console.log(err);
             res.sendStatus(500);
         })
     }
 });
 
+//GET /loans/new
 router.get('/new', function(req, res) {
     let loanDate = new Date();
     let returnDate = new Date();
@@ -70,10 +86,12 @@ router.get('/new', function(req, res) {
                 });
 });
 
+//POST /loans/new
+
 router.post('/new', function (req, res, next) {
     Loan.create(req.body)
         .then(function () {
-        res.redirect('/loans')
+        res.redirect('/loans?page=0')
     })
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError') {
@@ -105,7 +123,7 @@ router.post('/new', function (req, res, next) {
         })
 });
 
-// GET return book
+// GET /loans/return_book
 router.get('/return_book/:id', function (req, res, next) {
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
     Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
@@ -131,7 +149,7 @@ router.get('/return_book/:id', function (req, res, next) {
 });
 
 
-// PUT return book
+// PUT /loans/return_book
 router.put('/return_book/:id', function (req, res) {
     Loan.belongsTo(Book, {foreignKey: 'book_id'});
     Loan.belongsTo(Patron, {foreignKey: 'patron_id'});
@@ -143,7 +161,7 @@ router.put('/return_book/:id', function (req, res) {
             return loan.update(req.body)
         })
         .then(function () {
-            res.redirect('/loans');
+            res.redirect('/loans?page=0');
         })
         .catch(function (err) {
             console.log(req.body);

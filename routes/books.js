@@ -10,6 +10,8 @@ router.get('/', function(req, res, next) {
 
     let filter = req.query.filter;
     var searchField = req.query.searchField;
+    let page = req.query.page;
+    let prevPage = parseInt(page)-1;
 
     if(filter === 'overdue') {
         Loan.belongsTo(Book, {foreignKey: 'book_id'});
@@ -47,13 +49,11 @@ router.get('/', function(req, res, next) {
                         title: {
                             $like: '%' + searchField + '%'
                         }
-
                     },
                     {
                         author: {
                             $like: '%' + searchField + '%'
                         }
-
                     },
                     {
                         genre: {
@@ -72,20 +72,24 @@ router.get('/', function(req, res, next) {
         }).catch(function(err) {
             res.sendStatus(500);
         });
-    } else {
+    } else if (page){
+        let offset = parseInt(page) * 10;
         Book.findAll({
             order : [['title', 'ASC' ]],
-            limit : 10
+            limit : 10,
+            offset: offset
         })
             .then(function (books) {
-                console.log(books);
-                res.render('all_books', { books : books});
+                res.render('all_books', {
+                    books : books,
+                    page : parseInt(page) + 1,
+                    prevPage : prevPage
+                });
             })
             .catch(function (err) {
                 res.sendStatus(500);
         })
     }
-
 });
 
 //GET single book
@@ -120,7 +124,7 @@ router.put('/book_detail/:id', function (req, res, next) {
             return book.update(req.body);
     })
         .then(function () {
-            res.redirect('/books');
+            res.redirect('/books?page=0');
         })
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError'){
@@ -164,7 +168,7 @@ router.get('/new', function (req, res, next) {
 router.post('/new', function (req, res, next) {
     Book.create(req.body)
         .then(function () {
-        res.redirect('/books')
+        res.redirect('/books?page=0')
     })
         .catch(function (err) {
 

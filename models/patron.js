@@ -35,8 +35,8 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.STRING,
       validate : {
         notEmpty : {
-          msg : 'Enter email!'
-        }
+          msg : 'Enter an email!'
+        },
       }
     },
     library_id: {

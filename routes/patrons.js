@@ -4,10 +4,14 @@ const Book = require('../models').books;
 const Patron = require('../models').patrons;
 const Loan = require('../models').loans;
 
-// GET all patrons
+// GET /patrons
 router.get('/', function(req, res, next) {
-    var searchField = req.query.searchField;
+    let searchField = req.query.searchField;
+    let page = req.query.page;
+    let prevPage = parseInt(page)-1;
 
+
+    // display search results
     if(searchField !== undefined) {
         Patron.findAll({
             where: {
@@ -51,25 +55,38 @@ router.get('/', function(req, res, next) {
             .catch(function (err) {
                 response.sendStatus(500);
             })
-    } else {
-        Patron.findAll().then(function (patrons) {
-            res.render('all_patrons', {patrons: patrons });
+        // use pagination to display results in batches of 10
+    } else if (page) {
+        let offset = parseInt(page) * 10;
+        Patron.findAll({
+            order : [['last_name', 'ASC' ]],
+            limit : 10,
+            offset: offset
         })
+            .then(function (patrons) {
+            res.render('all_patrons', {
+                patrons: patrons,
+                page: parseInt(page) + 1,
+                prevPage: prevPage
+            });
+        })
+            .catch(function (err) {
+                response.sendStatus(500);
+            })
     }
-
 });
 
-// GET new patron page
+// GET /patrons/new
 router.get('/new', function(req, res, next) {
     res.render('new_patron', { patron: Patron.build()});
 });
 
-// POST new patron
+// POST /patrons/new
 router.post('/new', function(req, res, next) {
     console.log(req.body);
     Patron.create(req.body)
         .then(function (patron) {
-        res.redirect('/patrons')
+        res.redirect('/patrons?page=0')
     })
         .catch(function (err) {
             if(err.name ==='SequelizeValidationError'){
@@ -83,7 +100,7 @@ router.post('/new', function(req, res, next) {
         });
 });
 
-//GET single patron
+//GET /patrons/patron_detail
 router.get('/patron_detail/:id', function (req, res, next) {
     Patron.findById(req.params.id).then(function (patron) {
 
@@ -112,14 +129,14 @@ router.get('/patron_detail/:id', function (req, res, next) {
     })
 });
 
-// UPDATE patron
+// PUT /patrons/patron_detail
 router.put('/patron_detail/:id', function (req, res, next) {
     Patron.findById(req.params.id)
         .then(function (patron) {
             return patron.update(req.body);
         })
         .then(function () {
-            res.redirect('/patrons');
+            res.redirect('/patrons?page=0');
         })
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError'){
@@ -149,7 +166,6 @@ router.put('/patron_detail/:id', function (req, res, next) {
                 throw err;
             }
         })
-
 });
 
 module.exports = router;
