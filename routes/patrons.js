@@ -85,11 +85,12 @@ router.get('/new', function(req, res, next) {
 router.post('/new', function(req, res, next) {
     console.log(req.body);
     Patron.create(req.body)
-        .then(function (patron) {
+        .then(function () {
         res.redirect('/patrons?page=0')
     })
         .catch(function (err) {
             if(err.name ==='SequelizeValidationError'){
+                console.log(err.name);
                 res.render('new_patron', {
                     patron: Patron.build(req.body),
                     errors : err.errors

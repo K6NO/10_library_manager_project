@@ -2,6 +2,8 @@ extends layout
 
 block content
     h1 New Patron
+    if errors
+      include error
     form(method='post', actions='patrons/new')
       p
         label(for='first_name') First Name

@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       validate : {
         notEmpty : {
-          msg : 'Enter date!'
+          msg : 'Enter loaned on date!'
         }
       }
     },
@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       validate : {
         notEmpty : {
-          msg : 'Enter date!'
+          msg : 'Enter return by date!'
         }
       }
     },

@@ -95,11 +95,11 @@ router.post('/new', function (req, res, next) {
         .catch(function (err) {
             if(err.name === 'SequelizeValidationError') {
                 let loanDate = new Date();
-                loanDate = dateFormat(loanDate, 'yyyy-mm-dd');
                 console.log(loanDate);
                 let returnDate = new Date();
-                returnDate = dateFormat(returnDate, 'yyyy-mm-dd');
                 returnDate.setDate(loanDate.getDate() + 7);
+                loanDate = dateFormat(loanDate, 'yyyy-mm-dd');
+                returnDate = dateFormat(returnDate, 'yyyy-mm-dd');
                 Book.findAll()
                     .then(function (books) {
                         Patron.findAll()
